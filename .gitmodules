@@ -1,0 +1,6 @@
+[submodule "node-churn/deps/node"]
+	path = node-churn/deps/node
+	url = https://github.com/ry/node.git
+[submodule "node-churn/deps/connect"]
+	path = node-churn/deps/connect
+	url = https://github.com/senchalabs/connect.git
