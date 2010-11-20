@@ -1,15 +1,11 @@
 var util = require('util');
 
-Array.prototype.sum = function() {
-	return (! this.length) ? 0 : this.slice(1).sum() +((typeof this[0] == 'number') ? this[0] : 0);
-};
-
 Object.prototype.most_common = function(number,threshold){
 	var sorted = [];
 	threshold =(threshold==undefined)?1:threshold;
 	for (property in this){
 		if (this[property]>threshold){
-			sorted.push([property,this[property]]);		
+			sorted.push([parseInt(property),this[property]]);		
 		}
 	}
 	sorted.sort(function(a,b){return b[1]-a[1]});

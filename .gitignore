@@ -1,2 +1,10 @@
 bin
 build
+/node-churn/data.bin
+/node-churn/data.txt
+/node-churn/index.bin
+/node-churn/.project
+/hasher/hasher.jar
+/hasher/index.bin
+/hasher/.project
+/hasher/test

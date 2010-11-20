@@ -42,9 +42,7 @@ exports.load=function(indexFile,dataFile,hashWidth,callback){
 }
 
 exports.searchString=function(string,callback){
-	var hashes = lib.hashString(string,15);	
-	util.debug(hashes);	
-	exports.search(hashes,callback);
+	exports.search(lib.hashString(string,15),callback);
 }
 
 exports.search=function(hashes,callback){

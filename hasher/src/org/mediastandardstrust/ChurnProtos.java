@@ -1,0 +1,1 @@
+../../../../churn/java/org/mediastandardstrust/ChurnProtos.java

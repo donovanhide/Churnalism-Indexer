@@ -31,8 +31,8 @@ function runTests(){
 	churnIndex.searchString(" 10 Downing Street ",function(results){
 		util.log(util.inspect(results.most_common(20,2)));
 	})
-//	var test = setInterval(testSearch,150);
-//	setTimeout(function(){clearInterval(test);},60000)
+	var test = setInterval(testSearch,200);
+	setTimeout(function(){clearInterval(test);},60000)
 }
 
 exec("echo 3 | sudo tee /proc/sys/vm/drop_caches",function(){churnIndex.load('index.bin','data.bin',24,runTests);});
