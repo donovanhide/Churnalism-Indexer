@@ -1,0 +1,40 @@
+var util = require('util'),
+    exec = require('child_process').exec,
+    churnIndex = require('./churnIndex'),
+    runCount=0,
+    totalTime=0;
+
+function testSearch(){
+	var hashes = [],
+	    start = new Date();
+//	Math.seedrandom(start.getTime());
+	for (var i=0;i<3500;i++){
+		hashes.push(Math.floor(Math.random()*(1<<24)));	
+	}
+	churnIndex.search(hashes,function(results){
+		var now = new Date(),
+		    elapsed=(now-start),
+		    filteredResults = results.most_common(20,10),
+		    memory = process.memoryUsage();
+		runCount++;			
+		totalTime+=elapsed;
+		var averageTime = Math.floor(totalTime/runCount);
+		var message="Result "+runCount+" found in "+elapsed+"ms Average time: "+averageTime+"ms ";
+		message+="Best Result:"+filteredResults[0]+" Number of results: "+filteredResults.length;
+		message+=" rss: "+Math.floor(memory.rss/1024/1024)+"MB vsize: "+Math.floor(memory.vsize/1024/1024)+"MB heap: "
+		message+=Math.floor(memory.heapTotal/1024/1024)+"MB heap used: "+Math.floor(memory.heapUsed/1024/1024)+"MB";
+		util.log(message);
+	});
+}
+
+function runTests(){
+	churnIndex.searchString(" 10 Downing Street ",function(results){
+		util.log(util.inspect(results.most_common(20,2)));
+	})
+//	var test = setInterval(testSearch,150);
+//	setTimeout(function(){clearInterval(test);},60000)
+}
+
+exec("echo 3 | sudo tee /proc/sys/vm/drop_caches",function(){churnIndex.load('index.bin','data.bin',24,runTests);});
+
+
