@@ -1,13 +1,12 @@
 package org.mediastandardstrust;
 
-import com.google.protobuf.*;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
-public class ProtoBufRecordWriter extends RecordWriter<IntWritable, IntArrayWritable> {	
+public class BinaryRecordWriter extends RecordWriter<IntWritable, IntArrayWritable> {	
 	private DataOutputStream data;
 	private DataOutputStream index;
 	private int totalDataBytes;
@@ -16,7 +15,7 @@ public class ProtoBufRecordWriter extends RecordWriter<IntWritable, IntArrayWrit
 	private int MAX_BYTES = 524288;
 	private int counter;
 	
-	public ProtoBufRecordWriter(DataOutputStream data, DataOutputStream index) {
+	public BinaryRecordWriter(DataOutputStream data, DataOutputStream index) {
 		this.data = data;
 		this.index = index;
 		this.dataBytes = new byte[MAX_BYTES];

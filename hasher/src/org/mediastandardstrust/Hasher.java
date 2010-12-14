@@ -40,7 +40,7 @@ public class Hasher extends Configured implements Tool {
 		protected IntWritable outputKey;
 		protected IntArrayWritable outputValue;
 		protected ArrayList<IntWritable> valuesList;
-		protected int MAX_VALUES_LENGTH = 65535; 
+		protected int MAX_VALUES_LENGTH = 524288; 
 		
 		protected int valuesLength;
 		protected int maxValue;
@@ -74,7 +74,8 @@ public class Hasher extends Configured implements Tool {
 	
 	public static class LeftShiftPartitioner extends Partitioner<LongWritable, IntWritable> {
 		 public int getPartition(LongWritable key, IntWritable value,int numReduceTasks) {
-		    return (int)(key.get()>>>32 & Integer.MAX_VALUE) % numReduceTasks;
+//		    return (int)(key.get()>>>32 & Integer.MAX_VALUE) % numReduceTasks;
+		    return (int)((key.get()>>>32 & Integer.MAX_VALUE) / ((1<<24)/numReduceTasks));
 		 }
 	}
 	
@@ -106,20 +107,15 @@ public class Hasher extends Configured implements Tool {
 		job.setGroupingComparatorClass(LeftShiftComparator.class);
         
 		job.setMapperClass(Map.class);
-//		job.setCombinerClass(Reduce.class);
 		job.setReducerClass(Reduce.class);
 		
 		job.setInputFormatClass(MultilineCSVFileInputFormat.class);
-		job.setOutputFormatClass(TextOutputFormat.class);
-//		job.setOutputFormatClass(BinaryFileOutputFormat.class);
-//		job.setOutputFormatClass(ProtoBufOutputFormat.class);
+//		job.setOutputFormatClass(TextOutputFormat.class);
+		job.setOutputFormatClass(BinaryOutputFormat.class);
+		
+		job.setNumReduceTasks(4);
 		
 		MultilineCSVFileInputFormat.setInputPaths(job, new Path(args[0]));
-		
-		BinaryFileOutputFormat.setOutputPath(job, new Path(args[1]));
-		BinaryFileOutputFormat.setCompressOutput(job, true);
-		BinaryFileOutputFormat.setOutputCompressorClass(job, GzipCodec.class);
-
 		TextOutputFormat.setOutputPath(job, new Path(args[1]));
 		TextOutputFormat.setCompressOutput(job, true);
 		TextOutputFormat.setOutputCompressorClass(job, GzipCodec.class);

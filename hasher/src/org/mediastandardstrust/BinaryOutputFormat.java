@@ -16,7 +16,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.ReflectionUtils;
 
-public class ProtoBufOutputFormat extends FileOutputFormat<IntWritable, IntArrayWritable> {	
+public class BinaryOutputFormat extends FileOutputFormat<IntWritable, IntArrayWritable> {	
 	@Override
 	public RecordWriter<IntWritable, IntArrayWritable> getRecordWriter(TaskAttemptContext job) throws IOException, InterruptedException {
 		String extension = "";
@@ -36,12 +36,12 @@ public class ProtoBufOutputFormat extends FileOutputFormat<IntWritable, IntArray
 //	        FSDataOutputStream fileOut = fs.create(file,false,131072);
 	    	FSDataOutputStream dataFileOut = fs.create(dataFile,false);
 	    	FSDataOutputStream indexFileOut = fs.create(indexFile,false);
-	    	return new ProtoBufRecordWriter(dataFileOut,indexFileOut);
+	    	return new BinaryRecordWriter(dataFileOut,indexFileOut);
 	    } else {
 //	        FSDataOutputStream fileOut = fs.create(file, false,131072);
 	    	FSDataOutputStream dataFileOut = fs.create(dataFile,false);
 	    	FSDataOutputStream indexFileOut = fs.create(indexFile,false);
-	    	return new ProtoBufRecordWriter(new DataOutputStream(codec.createOutputStream(dataFileOut)),
+	    	return new BinaryRecordWriter(new DataOutputStream(codec.createOutputStream(dataFileOut)),
 	    		   new DataOutputStream(codec.createOutputStream(indexFileOut)));
 	    }
 	}

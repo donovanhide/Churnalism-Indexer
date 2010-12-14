@@ -1,0 +1,1 @@
+s3cmd sync /srv/vhost/churnalism.com/app/hadoop s3://news.churnalism.com/production/
