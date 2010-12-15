@@ -17,11 +17,35 @@ exports.readInt32 = function(buffer,position){
 	return ((buffer[position]<<24) | (buffer[position+1]<<16) | (buffer[position+2]<<8) | buffer[position+3]);
 }
 
+exports.readInt64 = function(buffer,position){
+    return (
+        (buffer[position]  <<56) |
+        (buffer[position+1]<<48) | 
+        (buffer[position+2]<<40) | 
+        (buffer[position+3]<<32) | 
+        (buffer[position+4]<<24) | 
+        (buffer[position+5]<<16) | 
+        (buffer[position+6]<<8)  | 
+        (buffer[position+7])
+    );
+}
+
 exports.writeInt32 = function(buffer,position,value){
 	buffer[position]   = value>>>24 & 0xFF;
 	buffer[position+1] = value>>>16 & 0xFF;
 	buffer[position+2] = value>>>8 & 0xFF;
 	buffer[position+3] = value & 0xFF;
+}
+
+exports.writeInt64 = function(buffer,position,value){
+    buffer[position]   = value>>>56 & 0xFF;
+	buffer[position+1] = value>>>48 & 0xFF;
+	buffer[position+2] = value>>>40 & 0xFF;
+	buffer[position+3] = value>>>32 & 0xFF;
+    buffer[position+4]   = value>>>24 & 0xFF;
+	buffer[position+5] = value>>>16 & 0xFF;
+	buffer[position+6] = value>>>8 & 0xFF;
+	buffer[position+7] = value & 0xFF;
 }
 
 exports.readVarInt32 = function(buffer){
