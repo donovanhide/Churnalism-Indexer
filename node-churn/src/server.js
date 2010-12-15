@@ -28,7 +28,7 @@ function main(app){
 	});
 }
 
-churnIndex.load('index.bin','data.bin',24,function(){
+churnIndex.load(process.argv[2],process.argv[3],24,function(){
 	app.use(connect.bodyDecoder());
 	app.use(connect.router(main));
 	app.listen(8000);
