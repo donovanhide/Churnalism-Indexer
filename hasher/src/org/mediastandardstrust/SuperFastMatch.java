@@ -23,9 +23,7 @@ public class SuperFastMatch {
 	public SortedSet<Integer> getHashes(String line){
 		hashes.clear();
 		for (int i = 0;i<(line.length()-windowSize);i++){
-			System.out.println(line.substring(i, i+windowSize+1));
-			System.out.println(reduceBits(murmurHash(line.substring(i, i+windowSize+1).getBytes())));
-			hashes.add(reduceBits(murmurHash(line.substring(i, i+windowSize+1).getBytes())));
+			hashes.add(reduceBits(murmurHash(line.substring(i, i+windowSize+1).toLowerCase().getBytes())));
 		}
 		return hashes;
 	}
