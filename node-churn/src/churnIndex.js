@@ -57,7 +57,6 @@ exports.search=function(hashes,callback){
     for (var i=0;i<hashes.length;i++){
         offsets[i]=lib.readInt64(positions,hashes[i]*8);
         lengths[i]=lib.readInt64(positions,(hashes[i]+1)*8)-offsets[i];
-        console.log(lib.readInt64(positions,hashes[i]*8));
         bufferLength+=lengths[i];
     }
     var buffer = new Buffer(bufferLength);
