@@ -35,6 +35,6 @@ function runTests(){
 	setTimeout(function(){clearInterval(test);},60000)
 }
 
-exec("echo 3 | sudo tee /proc/sys/vm/drop_caches",function(){churnIndex.load('index.bin','data.bin',24,runTests);});
+exec("echo 3 | sudo tee /proc/sys/vm/drop_caches",function(){churnIndex.load(process.argv[2],process.argv[3],24,runTests);});
 
 
