@@ -59,8 +59,8 @@ exports.search=function(hashes,callback){
         bufferLength+=lengths[i];
     }
     var buffer = new Buffer(bufferLength);
+    util.log('Starting Read');
     for (var i=0;i<hashes.length;i++){
-        util.log('Starting Read');
         fs.read(data,buffer,bufferOffset,lengths[i],offsets[i],function(err,bytesRead){
             resultCount++;
             if (resultCount==hashes.length){
