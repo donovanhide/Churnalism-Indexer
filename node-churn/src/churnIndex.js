@@ -15,7 +15,6 @@ exports.load=function(indexFile,dataFile,hashWidth,callback){
             var hash = lib.readInt32(index,i),
                 length = lib.readInt32(index,i+4);
             lib.writeInt64(positions,hash*8,cumulativeTotal);
-            console.log(hash,length,lib.readInt64(positions,hash*8));
             cumulativeTotal+=length;
         }
     }).on('end',function(){
