@@ -60,9 +60,11 @@ exports.search=function(hashes,callback){
     }
     var buffer = new Buffer(bufferLength);
     for (var i=0;i<hashes.length;i++){
+        util.log('Starting Read');
         fs.read(data,buffer,bufferOffset,lengths[i],offsets[i],function(err,bytesRead){
             resultCount++;
             if (resultCount==hashes.length){
+                util.log('Finished Read');
                 var previousStart=0,
                     length=0;
                 for (var i=0;i<hashes.length;i++){
@@ -70,6 +72,7 @@ exports.search=function(hashes,callback){
                     lib.mergeResults(results,lib.decodeDeltas(lib.readVarInt32(buffer.slice(previousStart,(previousStart+length)))));
                     previousStart+=length;              
                 }
+                util.log('Processed Result');
                 callback(results);      
             }
         });
