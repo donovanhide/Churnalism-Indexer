@@ -1,20 +1,22 @@
 var util = require('util');
 
 Object.prototype.most_common = function(number,threshold){
-	var sorted = [];
-	threshold =(threshold==undefined)?1:threshold;
-	for (property in this){
-		if (this[property]>threshold){
-			sorted.push([parseInt(property),this[property]]);		
-		}
-	}
-	sorted.sort(function(a,b){return b[1]-a[1]});
-	var limit = (number==undefined)?sorted.length:number;	
-	return sorted.slice(0,limit);
+    util.log("Starting sort");
+    var sorted = [];
+    threshold =(threshold==undefined)?1:threshold;
+    for (property in this){
+        if (this[property]>threshold){
+            sorted.push([parseInt(property),this[property]]);       
+        }
+    }
+    sorted.sort(function(a,b){return b[1]-a[1]});
+    var limit = (number==undefined)?sorted.length:number;   
+    util.log("Ending sort");
+    return sorted.slice(0,limit);
 }
 
 exports.readInt32 = function(buffer,position){
-	return ((buffer[position]<<24) | (buffer[position+1]<<16) | (buffer[position+2]<<8) | buffer[position+3]);
+    return ((buffer[position]<<24) | (buffer[position+1]<<16) | (buffer[position+2]<<8) | buffer[position+3]);
 }
 
 exports.readInt64 = function(buffer,position){
@@ -31,72 +33,72 @@ exports.readInt64 = function(buffer,position){
 }
 
 exports.writeInt32 = function(buffer,position,value){
-	buffer[position]   = value>>>24 & 0xFF;
-	buffer[position+1] = value>>>16 & 0xFF;
-	buffer[position+2] = value>>>8 & 0xFF;
-	buffer[position+3] = value & 0xFF;
+    buffer[position]   = value>>>24 & 0xFF;
+    buffer[position+1] = value>>>16 & 0xFF;
+    buffer[position+2] = value>>>8 & 0xFF;
+    buffer[position+3] = value & 0xFF;
 }
 
 exports.writeInt64 = function(buffer,position,value){
     buffer[position]   = value>>>56 & 0xFF;
-	buffer[position+1] = value>>>48 & 0xFF;
-	buffer[position+2] = value>>>40 & 0xFF;
-	buffer[position+3] = value>>>32 & 0xFF;
+    buffer[position+1] = value>>>48 & 0xFF;
+    buffer[position+2] = value>>>40 & 0xFF;
+    buffer[position+3] = value>>>32 & 0xFF;
     buffer[position+4]   = value>>>24 & 0xFF;
-	buffer[position+5] = value>>>16 & 0xFF;
-	buffer[position+6] = value>>>8 & 0xFF;
-	buffer[position+7] = value & 0xFF;
+    buffer[position+5] = value>>>16 & 0xFF;
+    buffer[position+6] = value>>>8 & 0xFF;
+    buffer[position+7] = value & 0xFF;
 }
 
 exports.readVarInt32 = function(buffer){
-	var values =[],
-	    value = 0,
-	    bufferIndex = 0,
-	    byte = 0,
-	    count=0,
-	    bufferLength=buffer.length;
-	while (bufferIndex<bufferLength) {
-		do{
-			byte = buffer[bufferIndex];
-    		value |= (byte & 0x7F) << (7 * count);
- 			bufferIndex++;
-			count++;
-		}while(byte & 0x80)
-		values.push(value);
-		count=0;
-		value=0;
-	}
-	return values;
+    var values =[],
+        value = 0,
+        bufferIndex = 0,
+        byte = 0,
+        count=0,
+        bufferLength=buffer.length;
+    while (bufferIndex<bufferLength) {
+        do{
+            byte = buffer[bufferIndex+count];
+            value |= (byte & 0x7F) << (7 * count);
+            count++;
+        }while(byte & 0x80)
+        values.push(value);
+        bufferIndex+=count;
+        count=0;
+        value=0;
+    }
+    return values;
 }
 
 exports.decodeDeltas = function(deltas){
-	var values = [],
-	    previousValue=0;
-	for (var i=0,l=deltas.length;i<l;i++){
-		values.push(previousValue+deltas[i]);
-		previousValue+=deltas[i];
-	}
-	return values;
+    var values = [],
+        previousValue=0;
+    for (var i=0,l=deltas.length;i<l;i++){
+        values.push(previousValue+deltas[i]);
+        previousValue+=deltas[i];
+    }
+    return values;
 }
 
 exports.mergeResults = function(results,values){
-	for (var i=0,l=values.length;i<l;i++){
-		if (results[values[i]]){
-			results[values[i]]++;		
-		}else{
-			results[values[i]]=1;		
-		}
-	}
+    for (var i=0,l=values.length;i<l;i++){
+        if (results[values[i]]){
+            results[values[i]]++;       
+        }else{
+            results[values[i]]=1;       
+        }
+    }
 }
 
 exports.hashString=function(string,window_size){
-	var hashes=new Array(string.length-window_size);;
-	for (var i=0;i<(string.length-window_size);i++){
-		var window = string.substring(i,i+window_size+1);
-		hashes[i]=exports.murmurHash(window);
-//		util.log(window+":"+hashes[i]);
-	}
-	return hashes;
+    var hashes=new Array(string.length-window_size);;
+    for (var i=0,l=(string.length-window_size);i<l;i++){
+        var window = string.substring(i,i+window_size+1);
+        hashes[i]=exports.murmurHash(window);
+//      util.log(window+":"+hashes[i]);
+    }
+    return hashes;
 }
 
 //https://gist.github.com/595035
