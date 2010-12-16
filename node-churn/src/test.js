@@ -28,7 +28,7 @@ function testSearch(){
 }
 
 function runTests(){
-	var test = setInterval(testSearch,100);
+	var test = setInterval(testSearch,2000);
 	setTimeout(function(){clearInterval(test);},60000)
 }
 
