@@ -53,11 +53,12 @@ exports.readVarInt32 = function(buffer){
 	    value = 0,
 	    bufferIndex = 0,
 	    byte = 0,
-	    count=0;
-	while (bufferIndex<buffer.length) {
+	    count=0,
+	    bufferLength=buffer.length;
+	while (bufferIndex<bufferLength) {
 		do{
 			byte = buffer[bufferIndex];
-    			value |= (byte & 0x7F) << (7 * count);
+    		value |= (byte & 0x7F) << (7 * count);
  			bufferIndex++;
 			count++;
 		}while(byte & 0x80)
@@ -71,7 +72,7 @@ exports.readVarInt32 = function(buffer){
 exports.decodeDeltas = function(deltas){
 	var values = [],
 	    previousValue=0;
-	for (var i=0;i<deltas.length;i++){
+	for (var i=0,l=deltas.length;i<l;i++){
 		values.push(previousValue+deltas[i]);
 		previousValue+=deltas[i];
 	}
@@ -79,7 +80,7 @@ exports.decodeDeltas = function(deltas){
 }
 
 exports.mergeResults = function(results,values){
-	for (var i=0;i<values.length;i++){
+	for (var i=0,l=values.length;i<l;i++){
 		if (results[values[i]]){
 			results[values[i]]++;		
 		}else{
