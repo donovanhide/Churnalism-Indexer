@@ -83,10 +83,9 @@ exports.decodeDeltas = function(deltas){
 
 exports.mergeResults = function(results,values){
     for (var i=0,l=values.length;i<l;i++){
-        if (results[values[i]]){
-            results[values[i]]++;       
-        }else{
-            results[values[i]]=1;       
+        var value = values[i];
+        if (!results[value]++){
+            results[value]=1;       
         }
     }
 }
