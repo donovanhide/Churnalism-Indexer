@@ -66,7 +66,7 @@ exports.decodeDeltaVarInt32 = function(results,bag,threshold,buffer){
                 results[previousValue]=bag[previousValue];
             }
         }else{
-            results[previousValue]=1;       
+            bag[previousValue]=1;       
         }
         bufferIndex+=count;
         count=0;
