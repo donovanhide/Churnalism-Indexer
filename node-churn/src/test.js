@@ -14,13 +14,12 @@ function testSearch(){
 	churnIndex.search(hashes,20,35,function(results){
 		var now = new Date(),
 		    elapsed=(now-start),
-            // filteredResults = results.most_common(20,35),
 		    memory = process.memoryUsage();
 		runCount++;			
 		totalTime+=elapsed;
 		var averageTime = Math.floor(totalTime/runCount);
 		var message="Result "+runCount+" found in "+elapsed+"ms Average time: "+averageTime+"ms ";
-		message+="Best Result:"+filteredResults[0]+" Number of results: "+filteredResults.length;
+		message+="Best Result:"+results[0]+" Number of results: "+filteredResults.length;
 		message+=" rss: "+Math.floor(memory.rss/1024/1024)+"MB vsize: "+Math.floor(memory.vsize/1024/1024)+"MB heap: "
 		message+=Math.floor(memory.heapTotal/1024/1024)+"MB heap used: "+Math.floor(memory.heapUsed/1024/1024)+"MB";
 		util.log(message);
