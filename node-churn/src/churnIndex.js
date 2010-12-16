@@ -67,7 +67,7 @@ exports.search=function(hashes,callback){
                 util.log('Finished Read');
                 var previousStart=0,
                     length=0;
-                for (var i=0;i<hashes.length;i++){
+                for (var i=0,l=hashes.length;i<l;i++){
                     length = lengths[i];                        
                     lib.mergeResults(results,lib.decodeDeltas(lib.readVarInt32(buffer.slice(previousStart,(previousStart+length)))));
                     previousStart+=length;              
