@@ -47,7 +47,7 @@ exports.writeInt64 = function(buffer,position,value){
     buffer[position+1] = value>>>48 & 0xFF;
     buffer[position+2] = value>>>40 & 0xFF;
     buffer[position+3] = value>>>32 & 0xFF;
-    buffer[position+4]   = value>>>24 & 0xFF;
+    buffer[position+4] = value>>>24 & 0xFF;
     buffer[position+5] = value>>>16 & 0xFF;
     buffer[position+6] = value>>>8 & 0xFF;
     buffer[position+7] = value & 0xFF;
@@ -74,9 +74,13 @@ exports.decodeDeltaVarInt32 = function(results,bag,threshold,buffer){
         }else{
             bag[previousValue]=1;       
         }
-        if (previousValue>2917474){
-            util.log('Value: '+value +' Previous Value: '+previousValue);
-        }
+        util.log("BufferIndex: "+bufferIndex+" Count: "+count+" Previous Value: "+previousValue+ " Value: "+value);
+        // if (previousValue>2917474){
+        //     util.log('!Value: '+value +' Previous Value: '+previousValue);
+        // }
+        // else{
+        //     util.log('Value: '+value +' Previous Value: '+previousValue);
+        // }
         bufferIndex+=count;
         count=0;
         value=0;

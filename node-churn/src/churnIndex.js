@@ -5,7 +5,7 @@ var fs = require('fs'),
     data;
 
 exports.load=function(indexFile,dataFile,hashWidth,callback){
-    positions = new Buffer((1<<hashWidth)*8);
+    positions = new Array((1<<hashWidth));
     data = fs.openSync(dataFile,'r');
     var cumulativeTotal=0;
     util.log('Started reading in index');
@@ -14,25 +14,25 @@ exports.load=function(indexFile,dataFile,hashWidth,callback){
         for (var i=0;i<index.length;i=i+8){
             var hash = lib.readInt32(index,i),
                 length = lib.readInt32(index,i+4);
-            lib.writeInt64(positions,hash*8,cumulativeTotal);
-            if (hash==10917973 || hash==11094359){
-                util.log('Hash: '+hash+' Offset:'+cumulativeTotal);   
+            positions[hash]=cumulativeTotal;
+            if (hash==10917973 ||hash==10917974 || hash==11094359 || hash==11094360){
+                util.log('Hash: '+hash+' Cumulative Total: '+cumulativeTotal+' Position: '+positions[hash]);   
             }
             cumulativeTotal+=length;
         }
     }).on('end',function(){
         util.log('Begin Patching');
         for(var i=1;i<(1<<hashWidth);i++){
-            if (lib.readInt64(positions,i*8)==0){
+            if (positions[i]==0){
                 var offset=1;
                 while(true){
-                    var next=lib.readInt64(positions,(i+offset)*8);
+                    var next=positions[i+offset];
                     if (next==0){
                         offset++                    
                     }
                     else{
                         util.log("Patching "+i+" with "+next);  
-                        lib.writeInt64(positions,i*8,next);
+                        positions[i]=next;
                         break;
                     }
                 }       
@@ -52,35 +52,27 @@ exports.searchString=function(string,number,threshold,callback){
 exports.search=function(hashes,number,threshold,callback){
     var bag={},
         results={},
-        resultCount=0,
-        offsets=new Array(hashes.length),
-        lengths=new Array(hashes.length),
-        bufferLength=0,
-        bufferOffset=0;
-    for (var i=0,l=hashes.length;i<l;i++){
-        offsets[i]=lib.readInt64(positions,hashes[i]*8);
-        lengths[i]=lib.readInt64(positions,(hashes[i]+1)*8)-offsets[i];
-        bufferLength+=lengths[i];
-        util.log('Hash: '+hashes[i]+' Offset: '+offsets[i]+' Length: '+lengths[i]);
-    }
-    var buffer = new Buffer(bufferLength);
+        resultCount=0;
     util.log('Starting Read');
     
-    function processResults(hash,offset,length){
+    function processResults(buffer){
         return function(err,bytesRead){
-             util.log('Hash: '+hash+' Offset: '+offset+' Length: '+length);
-                lib.decodeDeltaVarInt32(results,bag,threshold,buffer.slice(offset,(offset+length)));
-                resultCount++;
-                if (resultCount==hashes.length){
-                    util.log('Finished Read');
-                    callback(results.most_common(number));      
+            util.log("Buffer Length: "+buffer.length+" Bytes Read:"+bytesRead);
+            lib.decodeDeltaVarInt32(results,bag,threshold,buffer);
+            resultCount++;
+            if (resultCount==hashes.length){
+                util.log('Finished Read');
+                callback(results.most_common(number));      
             }
         }
     }
     
     for (var i=0,l=hashes.length;i<l;i++){
-        fs.read(data,buffer,bufferOffset,lengths[i],offsets[i],processResults(hashes[i],bufferOffset,lengths[i]));
-        bufferOffset+=lengths[i];
+        var offset=positions[hashes[i]],
+            length=positions[hashes[i]+1]-offset,
+            buffer=new Buffer(length);
+        util.log('Hash: '+hashes[i]+' Offset: '+offset+' Length: '+length);
+        fs.read(data,buffer,0,length,offset,processResults(buffer));
     }
 }
 
