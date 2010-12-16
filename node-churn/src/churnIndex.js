@@ -15,6 +15,9 @@ exports.load=function(indexFile,dataFile,hashWidth,callback){
             var hash = lib.readInt32(index,i),
                 length = lib.readInt32(index,i+4);
             lib.writeInt64(positions,hash*8,cumulativeTotal);
+            if (hash==10917973 || hash==11094359){
+                util.log('Hash: '+hash+' Offset:'+cumulativeTotal);   
+            }
             cumulativeTotal+=length;
         }
     }).on('end',function(){
@@ -58,29 +61,25 @@ exports.search=function(hashes,number,threshold,callback){
         offsets[i]=lib.readInt64(positions,hashes[i]*8);
         lengths[i]=lib.readInt64(positions,(hashes[i]+1)*8)-offsets[i];
         bufferLength+=lengths[i];
+        util.log('Hash: '+hashes[i]+' Offset: '+offsets[i]+' Length: '+lengths[i]);
     }
     var buffer = new Buffer(bufferLength);
     util.log('Starting Read');
-    for (var i=0;i<hashes.length;i++){
-        fs.read(data,buffer,bufferOffset,lengths[i],offsets[i],function(err,bytesRead){
-            resultCount++;
-            if (resultCount==hashes.length){
-                util.log('Finished Read');
-                var previousStart=0,
-                    length=0;
-                for (var i=0,l=hashes.length;i<l;i++){
-                    length = lengths[i];                 
-                    lib.decodeDeltaVarInt32(results,bag,threshold,buffer.slice(previousStart,(previousStart+length)));
-                    // util.log(hashes[i]);
-                    // util.log(results);
-                    // util.log(util.inspect(bag));
-                    // lib.mergeResults(results,lib.decodeDeltas(lib.readVarInt32(buffer.slice(previousStart,(previousStart+length)))));
-                    previousStart+=length;              
-                }
-                util.log('Processed Result');
-                callback(results.most_common(number));      
+    
+    function processResults(hash,offset,length){
+        return function(err,bytesRead){
+             util.log('Hash: '+hash+' Offset: '+offset+' Length: '+length);
+                lib.decodeDeltaVarInt32(results,bag,threshold,buffer.slice(offset,(offset+length)));
+                resultCount++;
+                if (resultCount==hashes.length){
+                    util.log('Finished Read');
+                    callback(results.most_common(number));      
             }
-        });
+        }
+    }
+    
+    for (var i=0,l=hashes.length;i<l;i++){
+        fs.read(data,buffer,bufferOffset,lengths[i],offsets[i],processResults(hashes[i],bufferOffset,lengths[i]));
         bufferOffset+=lengths[i];
     }
 }

@@ -5,12 +5,14 @@ Object.prototype.most_common = function(number){
     util.log("Starting sort of "+Object.keys(this).length);
     var sorted = [];
     for (var property in this){
-        sorted.push([parseInt(property),this[property]]);       
+        if (this.hasOwnProperty(property)) {
+            sorted.push([parseInt(property),this[property]]);       
+        }
     }
     sorted.sort(function(a,b){return b[1]-a[1]});
-    var limit = (number==undefined)?sorted.length:number;   
     util.log("Ending sort with "+sorted.length);
-    return sorted.slice(0,limit);
+    util.log(util.inspect(sorted));
+    return sorted.slice(0,number);
 }
 
 exports.readInt32 = function(buffer,position){
@@ -61,16 +63,19 @@ exports.decodeDeltaVarInt32 = function(results,bag,threshold,buffer){
     while (bufferIndex<bufferLength) {
         do{
             byte = buffer[bufferIndex+count];
-            value |= (byte & 0x7F) << (7 * count);
+            value |= ((byte & 0x7F) << (7 * count));
             count++;
         }while(byte & 0x80)
         previousValue+=value
-        if (bag[previousValue]++){
-            if (bag[previousValue]>threshold){
+        if (bag[previousValue]!=null){
+            if ((bag[previousValue]++)>threshold){
                 results[previousValue]=bag[previousValue];
             }
         }else{
             bag[previousValue]=1;       
+        }
+        if (previousValue>2917474){
+            util.log('Value: '+value +' Previous Value: '+previousValue);
         }
         bufferIndex+=count;
         count=0;
