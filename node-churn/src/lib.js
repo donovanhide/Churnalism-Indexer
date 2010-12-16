@@ -50,9 +50,8 @@ exports.writeInt64 = function(buffer,position,value){
     buffer[position+7] = value & 0xFF;
 }
 
-exports.decodeDeltaVarInt32 = function(buffer){
-    var values =[],
-        previousValue=0,
+exports.decodeDeltaVarInt32 = function(results,buffer){
+    var previousValue=0,
         value = 0,
         bufferIndex = 0,
         byte = 0,
@@ -64,12 +63,14 @@ exports.decodeDeltaVarInt32 = function(buffer){
             value |= (byte & 0x7F) << (7 * count);
             count++;
         }while(byte & 0x80)
-        values.push(previousValue+=value);
+        previousValue+=value
+        if (!results[previousValue]++){
+            results[previousValue]=1;       
+        }
         bufferIndex+=count;
         count=0;
         value=0;
     }
-    return values;
 }
 
 exports.readVarInt32 = function(buffer){

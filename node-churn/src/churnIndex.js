@@ -69,7 +69,7 @@ exports.search=function(hashes,callback){
                     length=0;
                 for (var i=0,l=hashes.length;i<l;i++){
                     length = lengths[i];                 
-                    lib.mergeResults(results,lib.decodeDeltaVarInt32(buffer.slice(previousStart,(previousStart+length))));
+                    lib.decodeDeltaVarInt32(results,buffer.slice(previousStart,(previousStart+length))));
                     // lib.mergeResults(results,lib.decodeDeltas(lib.readVarInt32(buffer.slice(previousStart,(previousStart+length)))));
                     previousStart+=length;              
                 }
