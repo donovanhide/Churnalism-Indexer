@@ -14,7 +14,7 @@ function testSearch(){
 	churnIndex.search(hashes,function(results){
 		var now = new Date(),
 		    elapsed=(now-start),
-		    filteredResults = results.most_common(20,10),
+		    filteredResults = results.most_common(20,35),
 		    memory = process.memoryUsage();
 		runCount++;			
 		totalTime+=elapsed;
@@ -28,10 +28,7 @@ function testSearch(){
 }
 
 function runTests(){
-	churnIndex.searchString(" 10 Downing Street ",function(results){
-		util.log(util.inspect(results.most_common(20,2)));
-	})
-	var test = setInterval(testSearch,200);
+	var test = setInterval(testSearch,100);
 	setTimeout(function(){clearInterval(test);},60000)
 }
 
