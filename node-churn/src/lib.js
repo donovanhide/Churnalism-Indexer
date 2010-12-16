@@ -4,7 +4,7 @@ Object.prototype.most_common = function(number,threshold){
     util.log("Starting sort");
     var sorted = [];
     threshold =(threshold==undefined)?1:threshold;
-    for (property in this){
+    for (var property in this){
         if (this[property]>threshold){
             sorted.push([parseInt(property),this[property]]);       
         }
