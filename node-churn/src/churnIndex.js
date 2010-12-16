@@ -46,8 +46,9 @@ exports.searchString=function(string,callback){
     exports.search(lib.hashString(string.toLowerCase(),15),callback);
 }
 
-exports.search=function(hashes,callback){
-    var results={},
+exports.search=function(hashes,number,threshold,callback){
+    var bag,
+        results={},
         resultCount=0,
         offsets=new Array(hashes.length),
         lengths=new Array(hashes.length),
@@ -69,12 +70,12 @@ exports.search=function(hashes,callback){
                     length=0;
                 for (var i=0,l=hashes.length;i<l;i++){
                     length = lengths[i];                 
-                    lib.decodeDeltaVarInt32(results,buffer.slice(previousStart,(previousStart+length)));
+                    lib.decodeDeltaVarInt32(results,bag,threshold,buffer.slice(previousStart,(previousStart+length)));
                     // lib.mergeResults(results,lib.decodeDeltas(lib.readVarInt32(buffer.slice(previousStart,(previousStart+length)))));
                     previousStart+=length;              
                 }
                 util.log('Processed Result');
-                callback(results);      
+                callback(results.most_common(number));      
             }
         });
         bufferOffset+=lengths[i];

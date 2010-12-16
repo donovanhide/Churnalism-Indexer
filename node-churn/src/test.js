@@ -11,10 +11,10 @@ function testSearch(){
 	for (var i=0;i<3500;i++){
 		hashes.push(Math.floor(Math.random()*(1<<24)));	
 	}
-	churnIndex.search(hashes,function(results){
+	churnIndex.search(hashes,20,35,function(results){
 		var now = new Date(),
 		    elapsed=(now-start),
-		    filteredResults = results.most_common(20,35),
+            // filteredResults = results.most_common(20,35),
 		    memory = process.memoryUsage();
 		runCount++;			
 		totalTime+=elapsed;

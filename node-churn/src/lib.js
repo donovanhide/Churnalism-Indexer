@@ -1,13 +1,10 @@
 var util = require('util');
 
-Object.prototype.most_common = function(number,threshold){
+Object.prototype.most_common = function(number){
     util.log("Starting sort");//" of "+Object.keys(this).length);
     var sorted = [];
-    threshold =(threshold==undefined)?1:threshold;
     for (var property in this){
-        if (this[property]>threshold){
-            sorted.push([parseInt(property),this[property]]);       
-        }
+        sorted.push([parseInt(property),this[property]]);       
     }
     sorted.sort(function(a,b){return b[1]-a[1]});
     var limit = (number==undefined)?sorted.length:number;   
@@ -50,7 +47,7 @@ exports.writeInt64 = function(buffer,position,value){
     buffer[position+7] = value & 0xFF;
 }
 
-exports.decodeDeltaVarInt32 = function(results,buffer){
+exports.decodeDeltaVarInt32 = function(results,bag,threshold,buffer){
     var previousValue=0,
         value = 0,
         bufferIndex = 0,
@@ -64,9 +61,9 @@ exports.decodeDeltaVarInt32 = function(results,buffer){
             count++;
         }while(byte & 0x80)
         previousValue+=value
-        if (results[previousValue]++){
-            if (results[previousValue]>10){
-                util.log(results[previousValue]);
+        if (bag[previousValue]++){
+            if (bag[previousValue]>threshold){
+                results[previousValue]=bag[previousValue];
             }
         }else{
             results[previousValue]=1;       
