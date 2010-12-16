@@ -47,7 +47,7 @@ exports.searchString=function(string,callback){
 }
 
 exports.search=function(hashes,number,threshold,callback){
-    var bag,
+    var bag={},
         results={},
         resultCount=0,
         offsets=new Array(hashes.length),
