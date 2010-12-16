@@ -50,7 +50,7 @@ exports.writeInt64 = function(buffer,position,value){
     buffer[position+7] = value & 0xFF;
 }
 
-export.decodeDeltaVarInt32 = function(buffer){
+exports.decodeDeltaVarInt32 = function(buffer){
     var values =[],
         previousValue=0,
         value = 0,
