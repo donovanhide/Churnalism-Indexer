@@ -1,6 +1,7 @@
 var util = require('util');
 
 Object.prototype.most_common = function(number){
+    util.inspect(this);
     util.log("Starting sort of "+Object.keys(this).length);
     var sorted = [];
     for (var property in this){
@@ -13,7 +14,10 @@ Object.prototype.most_common = function(number){
 }
 
 exports.readInt32 = function(buffer,position){
-    return ((buffer[position]<<24) | (buffer[position+1]<<16) | (buffer[position+2]<<8) | buffer[position+3]);
+    return ((buffer[position]  <<24) |
+            (buffer[position+1]<<16) |
+            (buffer[position+2]<<8)  |
+            buffer[position+3]);
 }
 
 exports.readInt64 = function(buffer,position){
