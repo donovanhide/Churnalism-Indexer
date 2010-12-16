@@ -42,8 +42,8 @@ exports.load=function(indexFile,dataFile,hashWidth,callback){
     })
 }
 
-exports.searchString=function(string,callback){
-    exports.search(lib.hashString(string.toLowerCase(),15),callback);
+exports.searchString=function(string,number,threshold,callback){
+    exports.search(lib.hashString(string.toLowerCase(),15),number,threshold,callback);
 }
 
 exports.search=function(hashes,number,threshold,callback){
