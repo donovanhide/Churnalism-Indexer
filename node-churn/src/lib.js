@@ -72,11 +72,11 @@ exports.readVarInt32 = function(buffer){
 }
 
 exports.decodeDeltas = function(deltas){
-    var values = [],
-        previousValue=0;
-    for (var i=0,l=deltas.length;i<l;i++){
-        values.push(previousValue+deltas[i]);
-        previousValue+=deltas[i];
+    var length = deltas.length,
+        values = new Array(length),
+        value=0;
+    for (var i=0;i<length;i++){
+        values[i]=(value+=deltas[i]);
     }
     return values;
 }
