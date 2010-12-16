@@ -1,7 +1,7 @@
 var util = require('util');
 
 Object.prototype.most_common = function(number,threshold){
-    util.log("Starting sort of "+this.keys.length);
+    util.log("Starting sort of "+Object.keys(this).length);
     var sorted = [];
     threshold =(threshold==undefined)?1:threshold;
     for (var property in this){
