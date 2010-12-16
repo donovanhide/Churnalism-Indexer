@@ -120,7 +120,7 @@ exports.hashString=function(string,window_size){
     for (var i=0,l=(string.length-window_size);i<l;i++){
         var window = string.substring(i,i+window_size+1);
         hashes[i]=exports.murmurHash(window);
-     util.log(window+":"+hashes[i]);
+     // util.log(window+":"+hashes[i]);
     }
     return hashes;
 }

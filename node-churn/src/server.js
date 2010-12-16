@@ -17,7 +17,6 @@ function main(app){
 		res.end(body, 'utf8');
 	});
 	app.post('/search',function(req,res){
-	    console.log(req.body.text);
 		churnIndex.searchString(req.body.text,20,(req.body.text.length/200),function(results){
 			var json = JSON.stringify(results);
 			res.writeHead(200, {
@@ -30,6 +29,8 @@ function main(app){
 }
 
 churnIndex.load(process.argv[2],process.argv[3],24,function(){
+    app.use(connect.responseTime());
+    app.use(connect.errorHandler({ dumpExceptions: true }));
 	app.use(connect.bodyDecoder());
 	app.use(connect.router(main));
 	app.listen(8000);
