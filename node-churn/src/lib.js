@@ -64,7 +64,11 @@ exports.decodeDeltaVarInt32 = function(results,buffer){
             count++;
         }while(byte & 0x80)
         previousValue+=value
-        if (!results[previousValue]++){
+        if (results[previousValue]++){
+            if (results[previousValue]>10){
+                util.log(results[previousValue]);
+            }
+        }else{
             results[previousValue]=1;       
         }
         bufferIndex+=count;
