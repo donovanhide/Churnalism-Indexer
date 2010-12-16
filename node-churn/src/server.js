@@ -29,7 +29,6 @@ function main(app){
 }
 
 churnIndex.load(process.argv[2],process.argv[3],24,function(){
-    app.use(connect.responseTime());
     app.use(connect.errorHandler({ dumpExceptions: true }));
 	app.use(connect.bodyDecoder());
 	app.use(connect.router(main));
