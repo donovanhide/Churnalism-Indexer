@@ -67,7 +67,9 @@ exports.search=function(hashes,number,threshold,callback){
         var offset=positions[hashes[i]],
             length=positions[hashes[i]+1]-offset,
             buffer=new Buffer(length);
-        fs.read(data,buffer,0,length,offset,processResults(buffer));
+        if (length<1000){
+            fs.read(data,buffer,0,length,offset,processResults(buffer));   
+        }
     }
 }
 
