@@ -20,9 +20,6 @@ exports.load=function(indexFile,dataFile,hashWidth,callback){
     }).on('end',function(){
         util.log('Begin Patching');
         for(var i=1,l=(1<<hashWidth);i<l;i++){
-            if ((positions[i+1]-positions[i])>150000){
-                util.log("Hash: "+i+" Length: "+(positions[i+1]-positions[i]));
-            }
             if (positions[i]==null){
                 var offset=1;
                 while(true){
