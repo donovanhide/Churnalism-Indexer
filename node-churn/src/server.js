@@ -32,6 +32,6 @@ churnIndex.load(process.argv[2],process.argv[3],24,function(){
     app.use(connect.errorHandler({ dumpExceptions: true }));
 	app.use(connect.bodyDecoder());
 	app.use(connect.router(main));
-	app.listen(8000);
-	util.log('Server running at http://127.0.0.1:8000/');
+	app.listen(process.argv[4]);
+	util.log('Server running at http://127.0.0.1:'+process.argv[4]+'/');
 });
