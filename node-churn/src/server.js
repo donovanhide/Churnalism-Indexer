@@ -17,7 +17,7 @@ function main(app){
 		res.end(body, 'utf8');
 	});
 	app.post('/search',function(req,res){
-		churnIndex.searchString(req.body.text,20,(req.body.text.length/200),function(results){
+		churnIndex.searchString(req.body.text,20,(req.body.text.length/20),function(results){
 			var json = JSON.stringify(results);
 			res.writeHead(200, {
 			    'Content-Type': 'application/json',

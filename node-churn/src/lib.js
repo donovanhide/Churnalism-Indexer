@@ -1,7 +1,6 @@
 var util = require('util');
 
 Object.prototype.most_common = function(number){
-    util.log(util.inspect(this));
     util.log("Starting sort of "+Object.keys(this).length);
     var sorted = [];
     for (var property in this){
@@ -11,7 +10,6 @@ Object.prototype.most_common = function(number){
     }
     sorted.sort(function(a,b){return b[1]-a[1]});
     util.log("Ending sort with "+sorted.length);
-    util.log(util.inspect(sorted));
     return sorted.slice(0,number);
 }
 
@@ -55,12 +53,12 @@ exports.writeInt64 = function(buffer,position,value){
 
 exports.decodeDeltaVarInt32 = function(results,bag,threshold,buffer){
     var previousValue=0,
-        value = 0,
         bufferIndex = 0,
-        byte = 0,
-        count=0,
         bufferLength=buffer.length;
     while (bufferIndex<bufferLength) {
+        var byte = 0,
+            count=0,
+            value = 0;
         do{
             byte = buffer[bufferIndex+count];
             value |= ((byte & 0x7F) << (7 * count));
@@ -74,16 +72,7 @@ exports.decodeDeltaVarInt32 = function(results,bag,threshold,buffer){
         }else{
             bag[previousValue]=1;       
         }
-        util.log("BufferIndex: "+bufferIndex+" Count: "+count+" Previous Value: "+previousValue+ " Value: "+value);
-        // if (previousValue>2917474){
-        //     util.log('!Value: '+value +' Previous Value: '+previousValue);
-        // }
-        // else{
-        //     util.log('Value: '+value +' Previous Value: '+previousValue);
-        // }
         bufferIndex+=count;
-        count=0;
-        value=0;
     }
 }
 

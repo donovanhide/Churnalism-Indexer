@@ -1,0 +1,13 @@
+diff --git a/src/node_file.cc b/src/node_file.cc
+index 0deca41..ac05dd7 100644
+--- a/src/node_file.cc
++++ b/src/node_file.cc
+@@ -592,7 +592,7 @@ static Handle<Value> Open(const Arguments& args) {
+   }
+ }
+ 
+-#define GET_OFFSET(a) (a)->IsInt32() ? (a)->IntegerValue() : -1;
++#define GET_OFFSET(a) (a)->IsNumber() ? (a)->IntegerValue() : -1;
+ 
+ // bytesWritten = write(fd, data, position, enc, callback)
+ // Wrapper for write(2).

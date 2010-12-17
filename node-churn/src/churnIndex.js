@@ -15,14 +15,14 @@ exports.load=function(indexFile,dataFile,hashWidth,callback){
             var hash = lib.readInt32(index,i),
                 length = lib.readInt32(index,i+4);
             positions[hash]=cumulativeTotal;
-            if (hash==10917973 ||hash==10917974 || hash==11094359 || hash==11094360){
-                util.log('Hash: '+hash+' Cumulative Total: '+cumulativeTotal+' Position: '+positions[hash]);   
-            }
             cumulativeTotal+=length;
         }
     }).on('end',function(){
         util.log('Begin Patching');
         for(var i=1,l=(1<<hashWidth);i<l;i++){
+            if ((positions[i+1]-positions[i])>150000){
+                util.log("Hash: "+i+" Length: "+(positions[i+1]-positions[i]));
+            }
             if (positions[i]==null){
                 var offset=1;
                 while(true){
@@ -57,7 +57,6 @@ exports.search=function(hashes,number,threshold,callback){
     
     function processResults(buffer){
         return function(err,bytesRead){
-            util.log("Buffer Length: "+buffer.length+" Bytes Read:"+bytesRead);
             lib.decodeDeltaVarInt32(results,bag,threshold,buffer);
             resultCount++;
             if (resultCount==hashes.length){
@@ -71,7 +70,6 @@ exports.search=function(hashes,number,threshold,callback){
         var offset=positions[hashes[i]],
             length=positions[hashes[i]+1]-offset,
             buffer=new Buffer(length);
-        util.log('Hash: '+hashes[i]+' Offset: '+offset+' Length: '+length);
         fs.read(data,buffer,0,length,offset,processResults(buffer));
     }
 }

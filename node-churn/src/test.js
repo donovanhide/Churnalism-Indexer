@@ -27,7 +27,10 @@ function testSearch(){
 }
 
 function runTests(){
-	churnIndex.search([0],0,0,function(){});
+    // churnIndex.search([0,1,2,3,4,5,6],0,0,function(){});
+    // churnIndex.search([1600000,1600001,1600002,1600003,1600004,1600005,1600006],0,0,function(){});
+    churnIndex.searchString("10 Downing Street",0,0,function(){});
+    // churnIndex.search([9268352],0,0,function(){});
 	//var test = setInterval(testSearch,2000);
 	//setTimeout(function(){clearInterval(test);},60000)
 }
