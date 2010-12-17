@@ -57,10 +57,11 @@ public class BinaryRecordWriter extends RecordWriter<IntWritable, IntArrayWritab
 			totalDataBytes+=writeDataVarInt32(((IntWritable)values.get()[i]).get(), totalDataBytes);
 		}
 		this.data.write(this.dataBytes, 0, totalDataBytes);
-		
+		this.data.flush();
 		writeIndexInt32(key.get(),0);
 		writeIndexInt32(totalDataBytes,4);
 		this.index.write(this.indexBytes, 0, 8);
+		this.index.flush();
 //		writeIndexInt32(values.get().length,8);
 //		this.index.write(this.indexBytes, 0, 12);
 	}

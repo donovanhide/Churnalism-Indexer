@@ -22,16 +22,16 @@ exports.load=function(indexFile,dataFile,hashWidth,callback){
         }
     }).on('end',function(){
         util.log('Begin Patching');
-        for(var i=1;i<(1<<hashWidth);i++){
-            if (positions[i]==0){
+        for(var i=1,l=(1<<hashWidth);i<l;i++){
+            if (positions[i]==null){
                 var offset=1;
                 while(true){
                     var next=positions[i+offset];
-                    if (next==0){
+                    if (next==null){
                         offset++                    
                     }
                     else{
-                        util.log("Patching "+i+" with "+next);  
+                        util.log("Patching "+(i+offset)+" with "+next);  
                         positions[i]=next;
                         break;
                     }

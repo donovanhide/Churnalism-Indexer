@@ -95,11 +95,6 @@ public class Hasher extends Configured implements Tool {
 		Job job = new Job(getConf());
 		job.setJarByClass(Hasher.class);
 		job.setJobName("hasher");
-        
-//		job.getConfiguration().setBoolean("mapred.compress.map.output", true);
-//		job.getConfiguration().setBoolean("mapred.output.compress", true);
-//		job.getConfiguration().setBoolean("mapred.task.profile",true);
-		
 		
 		job.setOutputKeyClass(LongWritable.class);
 		job.setOutputValueClass(IntWritable.class);
@@ -113,7 +108,7 @@ public class Hasher extends Configured implements Tool {
 //		job.setOutputFormatClass(TextOutputFormat.class);
 		job.setOutputFormatClass(BinaryOutputFormat.class);
 		
-		job.setNumReduceTasks(4);
+//		job.setNumReduceTasks(4);
 		
 		MultilineCSVFileInputFormat.setInputPaths(job, new Path(args[0]));
 		TextOutputFormat.setOutputPath(job, new Path(args[1]));

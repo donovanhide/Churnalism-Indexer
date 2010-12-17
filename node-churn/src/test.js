@@ -27,8 +27,9 @@ function testSearch(){
 }
 
 function runTests(){
-	var test = setInterval(testSearch,2000);
-	setTimeout(function(){clearInterval(test);},60000)
+	churnIndex.search([0],0,0,function(){});
+	//var test = setInterval(testSearch,2000);
+	//setTimeout(function(){clearInterval(test);},60000)
 }
 
 exec("echo 3 | sudo tee /proc/sys/vm/drop_caches",function(){churnIndex.load(process.argv[2],process.argv[3],24,runTests);});
